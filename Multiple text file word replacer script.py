@@ -7,7 +7,7 @@ def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
             contenido_val = archivo_val.read()
 
         contenido_modificado = contenido_val
-        # Bandera para verificar si se realizó alguna modificación
+        # Bool para verificar si se realizó alguna modificación
         modificado_bool = False
 
         # Reemplazar cada expresión y su versión en mayúsculas
@@ -15,6 +15,7 @@ def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
             if expr_val in contenido_val or expr_val.upper() in contenido_val:
                 contenido_modificado = contenido_modificado.replace(expr_val, repl_val)
                 contenido_modificado = contenido_modificado.replace(expr_val.upper(), repl_val.upper())
+                
                 # Se realizó al menos una modificación
                 modificado_bool = True
 
@@ -29,21 +30,27 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
     # Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto.
     # Contador de archivos modificados
     contador_archivos = 0
+    
     for directorio_actual, _, archivos_val in os.walk(directorio_base):
         for archivo_val in archivos_val:
             ruta_completa = os.path.join(directorio_actual, archivo_val)
+            
             # Intentar procesar el archivo como texto
             contenido_modificado = reemplazar_texto_en_archivo(ruta_completa, expresiones_val, reemplazos_val)
+            
             if contenido_modificado is not None:
                 # Crear la ruta de salida manteniendo la estructura de directorios
                 ruta_relativa = os.path.relpath(directorio_actual, directorio_base)
                 subdirectorio_salida = os.path.join(directorio_salida, ruta_relativa)
+                
                 # Crear subdirectorios si no existen
                 os.makedirs(subdirectorio_salida, exist_ok=True)
                 ruta_archivo_salida = os.path.join(subdirectorio_salida, archivo_val)
+                
                 # Guardar el archivo modificado en la carpeta de salida
                 with open(ruta_archivo_salida, 'w', encoding='utf-8') as archivo_salida:
                     archivo_salida.write(contenido_modificado)
+                
                 # Incrementar el contador de archivos modificados
                 contador_archivos += 1
 
@@ -54,9 +61,12 @@ def obtener_directorio_salida_unico(base_dir):
     # Generar un nombre de directorio único para evitar sobreescribir
     contador_val = 1
     directorio_salida = base_dir
+    
     while os.path.exists(directorio_salida):
         directorio_salida = f"{base_dir} ({contador_val})"
+        
         contador_val += 1
+    
     return directorio_salida
 
 def main():
@@ -67,6 +77,7 @@ def main():
             directorio_base = input("Enter directory: ")
             if os.path.exists(directorio_base):
                 break
+            
             print("Wrong directory")
 
         # Solicitar el número de expresiones a modificar
@@ -84,6 +95,7 @@ def main():
         for iter in range(num_expresiones_val):
             expr_val = input(f"Enter expression {iter + 1}: ")
             repl_val = input(f"Replace '{expr_val}' with: ")
+            
             expresiones_val.append(expr_val)
             reemplazos_val.append(repl_val)
 
