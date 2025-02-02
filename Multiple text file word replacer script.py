@@ -7,16 +7,19 @@ def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
             contenido_val = archivo_val.read()
 
         contenido_modificado = contenido_val
-        modificado_flag = False  # Bandera para verificar si se realizó alguna modificación
+        # Bandera para verificar si se realizó alguna modificación
+        modificado_bool = False
 
         # Reemplazar cada expresión y su versión en mayúsculas
         for expr_val, repl_val in zip(expresiones_val, reemplazos_val):
             if expr_val in contenido_val or expr_val.upper() in contenido_val:
                 contenido_modificado = contenido_modificado.replace(expr_val, repl_val)
                 contenido_modificado = contenido_modificado.replace(expr_val.upper(), repl_val.upper())
-                modificado_flag = True  # Se realizó al menos una modificación
+                # Se realizó al menos una modificación
+                modificado_bool = True
 
-        return contenido_modificado if modificado_flag else None  # Devolver el contenido modificado solo si hubo cambios
+        # Devolver el contenido modificado solo si hubo cambios
+        return contenido_modificado if modificado_bool else None
 
     except (UnicodeDecodeError, PermissionError, IOError):
         # Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
@@ -24,7 +27,8 @@ def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
 
 def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida):
     # Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto.
-    contador_archivos = 0  # Contador de archivos modificados
+    # Contador de archivos modificados
+    contador_archivos = 0
     for directorio_actual, _, archivos_val in os.walk(directorio_base):
         for archivo_val in archivos_val:
             ruta_completa = os.path.join(directorio_actual, archivo_val)
@@ -34,7 +38,8 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
                 # Crear la ruta de salida manteniendo la estructura de directorios
                 ruta_relativa = os.path.relpath(directorio_actual, directorio_base)
                 subdirectorio_salida = os.path.join(directorio_salida, ruta_relativa)
-                os.makedirs(subdirectorio_salida, exist_ok=True)  # Crear subdirectorios si no existen
+                # Crear subdirectorios si no existen
+                os.makedirs(subdirectorio_salida, exist_ok=True)
                 ruta_archivo_salida = os.path.join(subdirectorio_salida, archivo_val)
                 # Guardar el archivo modificado en la carpeta de salida
                 with open(ruta_archivo_salida, 'w', encoding='utf-8') as archivo_salida:
@@ -42,7 +47,8 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
                 # Incrementar el contador de archivos modificados
                 contador_archivos += 1
 
-    return contador_archivos  # Devolver el número de archivos modificados
+    # Devolver el número de archivos modificados
+    return contador_archivos
 
 def obtener_directorio_salida_unico(base_dir):
     # Generar un nombre de directorio único para evitar sobreescribir
