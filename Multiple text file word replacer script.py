@@ -98,8 +98,10 @@ def main():
         print("------------------------------------")
         if contador_archivos == 0:
             print("No modified files")
+        elif contador_archivos == 1:
+            print("1 modified file")
         else:
-            print(f"{contador_archivos} Files modified")
+            print(f"{contador_archivos} modified files")
         print("------------------------------------\n")
 
 if __name__ == "__main__":
