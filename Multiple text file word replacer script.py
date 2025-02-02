@@ -69,52 +69,48 @@ def obtener_directorio_salida_unico(base_dir):
     
     return directorio_salida
 
-def main():
-    # Bucle infinito
+# Bucle infinito
+while True:
+    # Solicitar el directorio de entrada
     while True:
-        # Solicitar el directorio de entrada
-        while True:
-            directorio_base = input("Enter directory: ")
-            if os.path.exists(directorio_base):
-                break
-            
-            print("Wrong directory")
+        directorio_base = input("Enter directory: ")
+        if os.path.exists(directorio_base):
+            break
+        
+        print("Wrong directory")
 
-        # Solicitar el número de expresiones a modificar
-        while True:
-            try:
-                num_expresiones_val = int(input("Enter number of expressions to replace: "))
-                break
-            except ValueError:
-                print("Wrong format")
+    # Solicitar el número de expresiones a modificar
+    while True:
+        try:
+            num_expresiones_val = int(input("Enter number of expressions to replace: "))
+            break
+        except ValueError:
+            print("Wrong format")
 
-        expresiones_val = []
-        reemplazos_val = []
+    expresiones_val = []
+    reemplazos_val = []
 
-        # Solicitar cada expresión y su reemplazo
-        for iter in range(num_expresiones_val):
-            expr_val = input(f"Enter expression {iter + 1}: ")
-            repl_val = input(f"Replace '{expr_val}' with: ")
-            
-            expresiones_val.append(expr_val)
-            reemplazos_val.append(repl_val)
+    # Solicitar cada expresión y su reemplazo
+    for iter in range(num_expresiones_val):
+        expr_val = input(f"Enter expression {iter + 1}: ")
+        repl_val = input(f"Replace '{expr_val}' with: ")
+        
+        expresiones_val.append(expr_val)
+        reemplazos_val.append(repl_val)
 
-        # Crear un directorio de salida único
-        directorio_salida = obtener_directorio_salida_unico("Output files")
-        os.makedirs(directorio_salida, exist_ok=True)
+    # Crear un directorio de salida único
+    directorio_salida = obtener_directorio_salida_unico("Output files")
+    os.makedirs(directorio_salida, exist_ok=True)
 
-        # Buscar y reemplazar en el directorio
-        contador_archivos = buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
+    # Buscar y reemplazar en el directorio
+    contador_archivos = buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
 
-        # Mostrar el número de archivos modificados
-        print("------------------------------------")
-        if contador_archivos == 0:
-            print("No modified files")
-        elif contador_archivos == 1:
-            print("1 modified file")
-        else:
-            print(f"{contador_archivos} modified files")
-        print("------------------------------------\n")
-
-if __name__ == "__main__":
-    main()
+    # Mostrar el número de archivos modificados
+    print("------------------------------------")
+    if contador_archivos == 0:
+        print("No modified files")
+    elif contador_archivos == 1:
+        print("1 modified file")
+    else:
+        print(f"{contador_archivos} modified files")
+    print("------------------------------------\n")
