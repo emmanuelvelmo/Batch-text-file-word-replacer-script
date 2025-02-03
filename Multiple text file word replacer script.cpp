@@ -1,9 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <filesystem>
-#include <algorithm>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<vector>
+#include<filesystem>
+#include<algorithm>
 
 // Reemplaza las expresiones exactas y sus versiones en mayúsculas en un archivo de texto
 std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vector<std::string>& expresiones_val, const std::vector<std::string>& reemplazos_val)
