@@ -1,12 +1,13 @@
 import os
 
-def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
-    # Reemplaza las expresiones exactas y sus versiones en mayúsculas en un archivo de texto.
+# Reemplaza las expresiones exactas y sus versiones en mayúsculas en un archivo de texto
+def f_reemplazar_texto(ruta_archivo, expresiones_val, reemplazos_val):
     try:
         with open(ruta_archivo, 'r', encoding='utf-8') as archivo_val:
             contenido_val = archivo_val.read()
 
         contenido_modificado = contenido_val
+        
         # Bool para verificar si se realizó alguna modificación
         modificado_bool = False
 
@@ -26,8 +27,8 @@ def reemplazar_texto_en_archivo(ruta_archivo, expresiones_val, reemplazos_val):
         # Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
         return None
 
+# Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto
 def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida):
-    # Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto.
     # Contador de archivos modificados
     contador_archivos = 0
     
@@ -36,7 +37,7 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
             ruta_completa = os.path.join(directorio_actual, archivo_val)
             
             # Intentar procesar el archivo como texto
-            contenido_modificado = reemplazar_texto_en_archivo(ruta_completa, expresiones_val, reemplazos_val)
+            contenido_modificado = f_reemplazar_texto(ruta_completa, expresiones_val, reemplazos_val)
             
             if contenido_modificado is not None:
                 # Crear la ruta de salida manteniendo la estructura de directorios
@@ -57,8 +58,8 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
     # Devolver el número de archivos modificados
     return contador_archivos
 
+# Generar un nombre de directorio único para evitar sobreescribir
 def obtener_directorio_salida_unico(base_dir):
-    # Generar un nombre de directorio único para evitar sobreescribir
     contador_val = 1
     directorio_salida = base_dir
     
