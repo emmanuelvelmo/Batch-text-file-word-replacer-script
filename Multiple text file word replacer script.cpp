@@ -10,7 +10,7 @@ std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vecto
 {
     try {
         std::ifstream archivo_val(ruta_archivo);
-        
+
         if (!archivo_val.is_open())
         {
             return "";
@@ -34,26 +34,26 @@ std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vecto
             if (contenido_val.find(expr_val) != std::string::npos || contenido_val.find(expr_val_upper) != std::string::npos)
             {
                 size_t pos = 0;
-                
+
                 while ((pos = contenido_modificado.find(expr_val, pos)) != std::string::npos)
                 {
                     contenido_modificado.replace(pos, expr_val.length(), repl_val);
-                    
+
                     pos += repl_val.length();
-                    
+
                     modificado_bool = true;
                 }
 
                 pos = 0;
-                
+
                 while ((pos = contenido_modificado.find(expr_val_upper, pos)) != std::string::npos)
                 {
                     std::string repl_val_upper = repl_val;
                     std::transform(repl_val_upper.begin(), repl_val_upper.end(), repl_val_upper.begin(), ::toupper);
                     contenido_modificado.replace(pos, expr_val_upper.length(), repl_val_upper);
-                    
+
                     pos += repl_val_upper.length();
-                    
+
                     modificado_bool = true;
                 }
             }
@@ -88,18 +88,23 @@ int f_buscar_reemplazar(const std::string& directorio_base, const std::vector<st
             {
                 // Crear la ruta de salida manteniendo la estructura de directorios
                 std::string ruta_relativa = std::filesystem::relative(entry.path(), directorio_base).string();
-                std::string subdirectorio_salida = std::filesystem::path(directorio_salida) / ruta_relativa;
+
+                // Convertir las rutas a std::filesystem::path antes de usar el operador /
+                std::filesystem::path subdirectorio_salida = std::filesystem::path(directorio_salida) / std::filesystem::path(ruta_relativa);
 
                 // Crear subdirectorios si no existen
-                std::filesystem::create_directories(std::filesystem::path(subdirectorio_salida).parent_path());
-                std::string ruta_archivo_salida = std::filesystem::path(directorio_salida) / ruta_relativa;
+                std::filesystem::create_directories(subdirectorio_salida.parent_path());
+
+                // Construir la ruta completa del archivo de salida
+                std::filesystem::path ruta_archivo_salida = std::filesystem::path(directorio_salida) / std::filesystem::path(ruta_relativa);
 
                 // Guardar el archivo modificado en la carpeta de salida
                 std::ofstream archivo_salida(ruta_archivo_salida);
-                
+
                 if (archivo_salida.is_open())
                 {
                     archivo_salida << contenido_modificado;
+
                     contador_archivos++;
                 }
             }
@@ -119,7 +124,7 @@ std::string f_directorio_salida(const std::string& base_dir)
     while (std::filesystem::exists(directorio_salida))
     {
         directorio_salida = base_dir + " (" + std::to_string(contador_val) + ")";
-        
+
         contador_val++;
     }
 
@@ -133,38 +138,38 @@ int main()
     {
         // Solicitar el directorio de entrada
         std::string directorio_base;
-        
+
         while (true)
         {
             std::cout << "Enter directory: ";
             std::getline(std::cin, directorio_base);
-            
+
             if (std::filesystem::exists(directorio_base))
             {
                 break;
             }
-            
+
             std::cout << "Wrong directory\n";
         }
 
         // Solicitar el número de expresiones a modificar
         int num_expresiones_val;
-        
+
         while (true)
         {
             std::cout << "Enter number of expressions to replace: ";
             std::cin >> num_expresiones_val;
-            
+
             if (std::cin.good())
             {
                 break;
             }
-            
+
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Wrong format\n";
         }
-        
+
         // Limpiar el buffer de entrada
         std::cin.ignore();
 
@@ -177,7 +182,7 @@ int main()
             std::string expr_val, repl_val;
             std::cout << "Enter expression " << iter + 1 << ": ";
             std::getline(std::cin, expr_val);
-            
+
             std::cout << "Replace '" << expr_val << "' with: ";
             std::getline(std::cin, repl_val);
 
@@ -194,7 +199,7 @@ int main()
 
         // Mostrar el número de archivos modificados
         std::cout << "------------------------------------\n";
-        
+
         if (contador_archivos == 0)
         {
             std::cout << "No modified files\n";
@@ -207,7 +212,7 @@ int main()
         {
             std::cout << contador_archivos << " modified files\n";
         }
-        
+
         std::cout << "------------------------------------\n\n";
     }
 
