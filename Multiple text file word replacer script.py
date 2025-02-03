@@ -22,13 +22,12 @@ def f_reemplazar_texto(ruta_archivo, expresiones_val, reemplazos_val):
 
         # Devolver el contenido modificado solo si hubo cambios
         return contenido_modificado if modificado_bool else None
-
     except (UnicodeDecodeError, PermissionError, IOError):
         # Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
         return None
 
 # Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto
-def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida):
+def f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida):
     # Contador de archivos modificados
     contador_archivos = 0
     
@@ -59,7 +58,7 @@ def buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplaz
     return contador_archivos
 
 # Generar un nombre de directorio único para evitar sobreescribir
-def obtener_directorio_salida_unico(base_dir):
+def f_directorio_salida(base_dir):
     contador_val = 1
     directorio_salida = base_dir
     
@@ -84,6 +83,7 @@ while True:
     while True:
         try:
             num_expresiones_val = int(input("Enter number of expressions to replace: "))
+            
             break
         except ValueError:
             print("Wrong format")
@@ -100,18 +100,20 @@ while True:
         reemplazos_val.append(repl_val)
 
     # Crear un directorio de salida único
-    directorio_salida = obtener_directorio_salida_unico("Output files")
+    directorio_salida = f_directorio_salida("Output files")
     os.makedirs(directorio_salida, exist_ok=True)
 
     # Buscar y reemplazar en el directorio
-    contador_archivos = buscar_y_reemplazar_en_directorio(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
+    contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
 
     # Mostrar el número de archivos modificados
     print("------------------------------------")
+    
     if contador_archivos == 0:
         print("No modified files")
     elif contador_archivos == 1:
         print("1 modified file")
     else:
         print(f"{contador_archivos} modified files")
+    
     print("------------------------------------\n")
