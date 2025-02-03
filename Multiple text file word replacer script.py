@@ -44,11 +44,11 @@ def f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, direct
                 subdirectorio_salida = os.path.join(directorio_salida, ruta_relativa)
                 
                 # Crear subdirectorios si no existen
-                os.makedirs(subdirectorio_salida, exist_ok=True)
+                os.makedirs(subdirectorio_salida, exist_ok = True)
                 ruta_archivo_salida = os.path.join(subdirectorio_salida, archivo_val)
                 
                 # Guardar el archivo modificado en la carpeta de salida
-                with open(ruta_archivo_salida, 'w', encoding='utf-8') as archivo_salida:
+                with open(ruta_archivo_salida, 'w', encoding = 'utf-8') as archivo_salida:
                     archivo_salida.write(contenido_modificado)
                 
                 # Incrementar el contador de archivos modificados
@@ -62,6 +62,7 @@ def f_directorio_salida(base_dir):
     contador_val = 1
     directorio_salida = base_dir
     
+    # Actualizar el nombre de la carpeta de salida hasta alcanzar el nombre único
     while os.path.exists(directorio_salida):
         directorio_salida = f"{base_dir} ({contador_val})"
         
@@ -74,6 +75,7 @@ while True:
     # Solicitar el directorio de entrada
     while True:
         directorio_base = input("Enter directory: ")
+        
         if os.path.exists(directorio_base):
             break
         
@@ -101,7 +103,7 @@ while True:
 
     # Crear un directorio de salida único
     directorio_salida = f_directorio_salida("Output files")
-    os.makedirs(directorio_salida, exist_ok=True)
+    os.makedirs(directorio_salida, exist_ok = True)
 
     # Buscar y reemplazar en el directorio
     contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
