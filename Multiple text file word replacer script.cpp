@@ -137,7 +137,7 @@ int main()
 {
     while (true)
     {
-        // Solicitar el directorio de entrada
+        // Directorio de entrada
         std::string directorio_base;
 
         while (true)
@@ -153,7 +153,7 @@ int main()
             std::cout << "Wrong directory\n";
         }
 
-        // Solicitar el número de expresiones a modificar
+        // Número de expresiones a modificar
         int num_expresiones_val;
 
         while (true)
