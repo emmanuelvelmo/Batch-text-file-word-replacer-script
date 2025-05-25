@@ -14,7 +14,7 @@ std::string f_reemplazar_texto(const std::string &ruta_archivo, const std::vecto
 
         if (!archivo_val.is_open())
         {
-            return "";
+            continue;
         }
 
         std::string contenido_val((std::istreambuf_iterator<char>(archivo_val)), std::istreambuf_iterator<char>());
@@ -66,7 +66,7 @@ std::string f_reemplazar_texto(const std::string &ruta_archivo, const std::vecto
     catch (const std::exception &e)
     {
         // Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
-        return "";
+        continue;
     }
 }
 
@@ -197,11 +197,6 @@ int main()
         // Crear directorio de salida
         std::filesystem::create_directory(directorio_salida);
         
-        
-        
-        
-        
-
         // Buscar y reemplazar en el directorio
         int contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida);
 
