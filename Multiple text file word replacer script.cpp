@@ -14,7 +14,7 @@ std::string f_reemplazar_texto(const std::string &ruta_archivo, const std::vecto
 
         if (!archivo_val.is_open())
         {
-            continue;
+            return "";
         }
 
         std::string contenido_val((std::istreambuf_iterator<char>(archivo_val)), std::istreambuf_iterator<char>());
