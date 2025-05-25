@@ -117,14 +117,14 @@ int f_buscar_reemplazar(const std::string &directorio_base, const std::vector<st
 }
 
 // Generar un nombre de directorio único para evitar sobreescribir
-std::string f_directorio_salida(const std::string &base_dir)
+std::string f_directorio_salida()
 {
     int contador_val = 1;
     std::string directorio_salida = base_dir;
 
     while (std::filesystem::exists(directorio_salida))
     {
-        directorio_salida = base_dir + " (" + std::to_string(contador_val) + ")";
+        directorio_salida = "Output files (" + std::to_string(contador_val) + ")";
 
         contador_val++;
     }
@@ -191,9 +191,16 @@ int main()
             reemplazos_val.push_back(repl_val);
         }
 
-        // Crear un directorio de salida único
-        std::string directorio_salida = f_directorio_salida("Output files");
+        // Generar un directorio de salida único
+        std::string directorio_salida = f_directorio_salida();
+        
+        // Crear directorio de salida
         std::filesystem::create_directory(directorio_salida);
+        
+        
+        
+        
+        
 
         // Buscar y reemplazar en el directorio
         int contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida);
