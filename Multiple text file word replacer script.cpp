@@ -6,7 +6,7 @@
 #include<algorithm>
 
 // Reemplaza las expresiones exactas y sus versiones en mayúsculas en un archivo de texto
-std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vector<std::string>& expresiones_val, const std::vector<std::string>& reemplazos_val)
+std::string f_reemplazar_texto(const std::string &ruta_archivo, const std::vector<std::string> &expresiones_val, const std::vector<std::string> &reemplazos_val)
 {
     try
     {
@@ -26,8 +26,8 @@ std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vecto
         // Reemplazar cada expresión y su versión en mayúsculas
         for (size_t i = 0; i < expresiones_val.size(); ++i)
         {
-            const std::string& expr_val = expresiones_val[i];
-            const std::string& repl_val = reemplazos_val[i];
+            const std::string &expr_val = expresiones_val[i];
+            const std::string &repl_val = reemplazos_val[i];
 
             std::string expr_val_upper = expr_val;
             std::transform(expr_val_upper.begin(), expr_val_upper.end(), expr_val_upper.begin(), ::toupper);
@@ -63,7 +63,7 @@ std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vecto
         // Devolver el contenido modificado solo si hubo cambios
         return modificado_bool ? contenido_modificado : "";
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         // Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
         return "";
@@ -71,12 +71,12 @@ std::string f_reemplazar_texto(const std::string& ruta_archivo, const std::vecto
 }
 
 // Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto
-int f_buscar_reemplazar(const std::string& directorio_base, const std::vector<std::string>& expresiones_val, const std::vector<std::string>& reemplazos_val, const std::string& directorio_salida)
+int f_buscar_reemplazar(const std::string &directorio_base, const std::vector<std::string> &expresiones_val, const std::vector<std::string> &reemplazos_val, const std::string &directorio_salida)
 {
     // Contador de archivos modificados
     int contador_archivos = 0;
 
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(directorio_base))
+    for (const std::filesystem::directory_entry &entry : std::filesystem::recursive_directory_iterator(directorio_base))
     {
         if (entry.is_regular_file())
         {
@@ -117,7 +117,7 @@ int f_buscar_reemplazar(const std::string& directorio_base, const std::vector<st
 }
 
 // Generar un nombre de directorio único para evitar sobreescribir
-std::string f_directorio_salida(const std::string& base_dir)
+std::string f_directorio_salida(const std::string &base_dir)
 {
     int contador_val = 1;
     std::string directorio_salida = base_dir;
