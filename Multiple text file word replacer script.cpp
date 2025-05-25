@@ -205,6 +205,9 @@ int main()
 
         if (contador_archivos == 0)
         {
+            // Eliminar directorio
+            std::filesystem::remove_all(directorio_salida);
+            
             std::cout << "No modified files\n";
         }
         else if (contador_archivos == 1)
