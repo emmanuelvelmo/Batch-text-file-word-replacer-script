@@ -1,37 +1,44 @@
 import os
 
+# Lista de codificaciones a probar (en orden de prioridad)
+codificaciones_txt = ['utf-8', 'latin-1', 'utf-16', 'cp1252']
+
 # Reemplaza las expresiones exactas y sus versiones en mayúsculas en un archivo de texto
 def f_reemplazar_texto(ruta_archivo, expresiones_val, reemplazos_val):
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo_val:
-            contenido_val = archivo_val.read()
-
-        contenido_modificado = contenido_val
-        
-        # Bool para verificar si se realizó alguna modificación
-        modificado_bool = False
-
-        # Reemplazar cada expresión y su versión en mayúsculas
-        for expr_val, repl_val in zip(expresiones_val, reemplazos_val):
-            if expr_val in contenido_val or expr_val.upper() in contenido_val:
-                contenido_modificado = contenido_modificado.replace(expr_val, repl_val)
-                contenido_modificado = contenido_modificado.replace(expr_val.upper(), repl_val.upper())
-                
-                # Se realizó al menos una modificación
-                modificado_bool = True
-
-        # Devolver el contenido modificado solo si hubo cambios
-        return contenido_modificado if modificado_bool else None
-    except (UnicodeDecodeError, PermissionError, IOError):
-        # Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
-        return None
+    # Intenta decodificar en cada formato
+    for codificacion_iter in codificaciones_txt:
+        try:
+            with open(ruta_archivo, 'r', encoding = codificacion_iter) as archivo_val:
+                contenido_val = archivo_val.read()
+    
+            contenido_modificado = contenido_val
+            
+            # Bool para verificar si se realizó alguna modificación
+            modificado_bool = False
+    
+            # Reemplazar cada expresión y su versión en mayúsculas
+            for expr_val, repl_val in zip(expresiones_val, reemplazos_val):
+                if expr_val in contenido_val or expr_val.upper() in contenido_val:
+                    contenido_modificado = contenido_modificado.replace(expr_val, repl_val)
+                    contenido_modificado = contenido_modificado.replace(expr_val.upper(), repl_val.upper())
+                    
+                    # Se realizó al menos una modificación
+                    modificado_bool = True
+    
+            # Devolver el contenido modificado solo si hubo cambios
+            return contenido_modificado if modificado_bool else None
+        except (UnicodeDecodeError, PermissionError, IOError):
+            # Si ocurre un error al abrir o leer el archivo, simplemente lo ignoramos
+            return None
 
 # Recorre recursivamente un directorio y reemplaza las expresiones en archivos de texto
 def f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida):
     # Contador de archivos modificados
     contador_archivos = 0
     
+    # Recorre recursivamente todos los subdirectorios del directorio base
     for directorio_actual, _, archivos_val in os.walk(directorio_base):
+        # Itera sobre cada archivo encontrado en el directorio actual
         for archivo_val in archivos_val:
             ruta_completa = os.path.join(directorio_actual, archivo_val)
             
@@ -46,13 +53,17 @@ def f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, direct
                 # Crear subdirectorios si no existen
                 os.makedirs(subdirectorio_salida, exist_ok = True)
                 ruta_archivo_salida = os.path.join(subdirectorio_salida, archivo_val)
+
+                # Intenta decodificar en cada formato
+                for codificacion_iter in codificaciones_txt:
+                    # Guardar el archivo modificado en la carpeta de salida
+                    with open(ruta_archivo_salida, 'w', encoding = codificacion_iter) as archivo_salida:
+                        archivo_salida.write(contenido_modificado)
                 
-                # Guardar el archivo modificado en la carpeta de salida
-                with open(ruta_archivo_salida, 'w', encoding = 'utf-8') as archivo_salida:
-                    archivo_salida.write(contenido_modificado)
-                
-                # Incrementar el contador de archivos modificados
-                contador_archivos += 1
+                    # Incrementar el contador de archivos modificados
+                    contador_archivos += 1
+                    
+                    break
 
     # Devolver el número de archivos modificados
     return contador_archivos
@@ -75,7 +86,8 @@ while True:
     # Solicitar el directorio de entrada
     while True:
         directorio_base = input("Enter directory: ")
-        
+
+        # Verificar si el directorio existe
         if os.path.exists(directorio_base):
             break
         
