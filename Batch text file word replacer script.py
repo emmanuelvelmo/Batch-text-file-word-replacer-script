@@ -90,7 +90,7 @@ while True:
         if os.path.exists(directorio_base):
             break
         
-        print("Wrong directory\n")
+        print("Wrong directory")
 
     # Solicitar el número de expresiones a modificar
     while True:
