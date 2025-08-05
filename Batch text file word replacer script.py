@@ -47,8 +47,7 @@ def f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, direct
             
             if contenido_modificado is not None:
                 # Crear la ruta de salida manteniendo la estructura de directorios
-                ruta_relativa = os.path.relpath(directorio_actual, directorio_base)
-                subdirectorio_salida = os.path.join(directorio_salida, ruta_relativa)
+                subdirectorio_salida = os.path.join(directorio_salida, os.path.relpath(directorio_actual, directorio_base))
                 
                 # Crear subdirectorios si no existen
                 os.makedirs(subdirectorio_salida, exist_ok = True)
@@ -81,17 +80,17 @@ def f_directorio_salida(base_dir):
     
     return directorio_salida
 
-# Bucle infinito
+# Bucle principal del programa
 while True:
     # Solicitar el directorio de entrada
     while True:
-        directorio_base = input("Enter directory: ")
+        directorio_base = input("Enter directory: ").strip('"\'')
 
         # Verificar si el directorio existe
         if os.path.exists(directorio_base):
             break
         
-        print("Wrong directory")
+        print("Wrong directory\n")
 
     # Solicitar el número de expresiones a modificar
     while True:
