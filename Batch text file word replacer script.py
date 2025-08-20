@@ -116,11 +116,11 @@ while True:
     directorio_salida = f_directorio_salida("Output files")
     os.makedirs(directorio_salida, exist_ok = True)
 
-    # Buscar y reemplazar en el directorio
-    contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
-
     # Mostrar el número de archivos modificados
     print("------------------------------------")
+
+    # Buscar y reemplazar en el directorio
+    contador_archivos = f_buscar_reemplazar(directorio_base, expresiones_val, reemplazos_val, directorio_salida)
     
     if contador_archivos == 0:
         print("No modified files")
